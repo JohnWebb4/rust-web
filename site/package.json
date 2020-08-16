@@ -1,0 +1,20 @@
+{
+  "name": "wasm-dev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.html",
+  "scripts": {
+    "build": "webpack --mode=production",
+    "serve": "webpack-dev-server"
+  },
+  "author": "JohnWebb4",
+  "license": "MIT",
+  "dependencies": {
+    "rust-web": "^0.1.0"
+  },
+  "devDependencies": {
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
