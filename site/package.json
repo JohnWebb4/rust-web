@@ -5,7 +5,8 @@
   "main": "dist/index.html",
   "scripts": {
     "build": "webpack --mode=production",
-    "serve": "webpack-dev-server"
+    "build:dev": "webpack",
+    "serve": "webpack-dev-server dist"
   },
   "author": "JohnWebb4",
   "license": "MIT",

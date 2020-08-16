@@ -1,7 +1,6 @@
 /target
 Cargo.lock
 
-/site/dist/*
 */node_modules
+/site/dist/*
 !/site/dist/index.html
-!/site/dist/index.js
