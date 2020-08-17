@@ -1,55 +1,43 @@
-import("rust-web/rust_web_bg.wasm")
-  .then((resp) => resp.arrayBuffer())
-  .then((bytes) => WebAssembly.instantiate(bytes, { env: { cos: Math.cos } }))
-  .then((results) => {
-    let module = {};
-    let mod = results.instance;
+import("rust-web/rust_web_bg.wasm").then((module) => {
+  console.log("module", module);
+  let width = 500;
+  let height = 500;
 
-    module.alloc = mod.exports.alloc;
-    module.dealloc = mod.exports.dealloc;
-    module.fill = mod.exports.fill;
+  let canvas = document.getElementById("screen");
+  if (canvas.getContext) {
+    let context = canvas.getContext("2d");
 
-    let width = 500;
-    let height = 500;
+    let byteSize = width * height * 4;
+    let pointer = module.alloc(byteSize);
 
-    let canvas = document.getElementById("screen");
-    if (canvas.getContext) {
-      let context = canvas.getContext("2d");
+    let usub = new Uint8ClampedArray(module.memory.buffer, pointer, byteSize);
 
-      let byteSize = width * height * 4;
-      let pointer = module.alloc(byteSize);
+    let img = new ImageData(usub, width, height);
 
-      let usub = new Uint8ClampedArray(
-        mod.exports.memory.bugger,
-        pointer,
-        byteSize
-      );
+    let start = null;
 
-      let img = new ImageData(usub, width, height);
+    function step(timestamp) {
+      let progress;
 
-      let start = null;
+      if (start == null) start = timestamp;
+      progress = timestamp - start;
+      if (progress > 100) {
+        console.log("step", progress);
+        module.fill(pointer, width, height, timestamp);
 
-      function step(timestamp) {
-        let progress;
+        start = timestamp;
 
-        if (start == null) start = timestamp;
-        progress = timestamp - start;
-        if (progress > 100) {
-          module.fill(pointer, width, height, timestamp);
-
-          start = timestamp;
-
-          window.requestAnimationFrame(draw);
-        } else {
-          window.requestAnimationFrame(step);
-        }
-      }
-
-      function draw() {
-        context.putImageData(img, 0, 0);
+        window.requestAnimationFrame(draw);
+      } else {
         window.requestAnimationFrame(step);
       }
+    }
 
+    function draw() {
+      context.putImageData(img, 0, 0);
       window.requestAnimationFrame(step);
     }
-  });
+
+    window.requestAnimationFrame(step);
+  }
+});

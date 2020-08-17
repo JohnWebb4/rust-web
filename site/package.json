@@ -6,8 +6,7 @@
   "scripts": {
     "build": "./bin/build.sh --mode=production",
     "build:dev": "./bin/build.sh --mode=development",
-    "build:watch": "./bin/build.sh --mode=development --watch",
-    "serve": "open dist"
+    "serve": "./bin/build.sh --watch"
   },
   "author": "JohnWebb4",
   "license": "MIT",
@@ -16,6 +15,7 @@
   },
   "devDependencies": {
     "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   }
 }

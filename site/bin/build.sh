@@ -13,4 +13,8 @@ cp src/index.html dist/
 
 # Building webpack
 echo 'Packaging'
-npx webpack $args
+if [[ "$args" == *"--watch"* ]]; then 
+  webpack-dev-server
+else 
+  npx webpack $args
+fi
