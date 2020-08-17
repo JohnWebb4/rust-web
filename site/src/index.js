@@ -22,7 +22,6 @@ import("rust-web/rust_web_bg.wasm").then((module) => {
       if (start == null) start = timestamp;
       progress = timestamp - start;
       if (progress > 100) {
-        console.log("step", progress);
         module.fill(pointer, width, height, timestamp);
 
         start = timestamp;
