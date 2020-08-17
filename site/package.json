@@ -4,9 +4,10 @@
   "description": "",
   "main": "dist/index.html",
   "scripts": {
-    "build": "webpack --mode=production",
-    "build:dev": "webpack",
-    "serve": "webpack-dev-server dist"
+    "build": "./bin/build.sh --mode=production",
+    "build:dev": "./bin/build.sh --mode=development",
+    "build:watch": "./bin/build.sh --mode=development --watch",
+    "serve": "open dist"
   },
   "author": "JohnWebb4",
   "license": "MIT",
@@ -15,7 +16,6 @@
   },
   "devDependencies": {
     "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-cli": "^3.3.12"
   }
 }
