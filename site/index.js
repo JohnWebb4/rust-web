@@ -1,8 +1,14 @@
 function init() {
-  return WebAssembly.instantiateStreaming(fetch("./opt.wasm")).then(
+  let config = {
+    env: {
+      console_log: (arg) => console.log("rust", arg),
+    },
+  };
+
+  return WebAssembly.instantiateStreaming(fetch("./opt.wasm"), config).then(
     ({ instance }) => {
-      const width = 500;
-      const height = 500;
+      const width = 900;
+      const height = 350;
 
       const canvas = document.getElementById("screen");
       canvas.height = height;
