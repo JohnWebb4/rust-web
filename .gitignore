@@ -2,3 +2,4 @@
 Cargo.lock
 
 /site/opt.wasm
+node_modules

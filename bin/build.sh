@@ -14,13 +14,17 @@ function build {
 }
 
 function size_check {
-  size=`ls -lh site | awk -F ' ' '{sum+=$5;} END{print sum}'`
+  ## List file sizes
+  ls -l site | awk -F ' ' '{print $9, ": ", $5, "B";}'
+
+  size=`ls -l site | awk -F ' ' '{sum+=$5;} END{print sum}'`
+
+  echo "Size is: $( bc <<< "scale=2;$size / 1000" ) K"
 
   if [[ $size -gt 13000 ]]; then
-    echo "Over 13 size limit"
+    echo "Over 13K size limit"
+    exit 1
   fi
-
-  echo "Size is: $size B"
 }
 
 function main {
