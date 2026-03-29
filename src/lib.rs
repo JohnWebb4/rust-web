@@ -1,3 +1,4 @@
+use core::cell::UnsafeCell;
 use core::sync::atomic::{AtomicU32, Ordering};
 use wasm_bindgen::prelude::*;
 
@@ -8,24 +9,25 @@ const WIDTH: usize = 900;
 
 static FRAME: AtomicU32 = AtomicU32::new(START_FRAME);
 
-static mut BUFFER: [u8; 4 * WIDTH * HEIGHT] = [0; 4 * WIDTH * HEIGHT];
+struct SyncBuffer(UnsafeCell<[u8; 4 * WIDTH * HEIGHT]>);
+unsafe impl Sync for SyncBuffer {}
+
+static BUFFER: SyncBuffer = SyncBuffer(UnsafeCell::new([0; 4 * WIDTH * HEIGHT]));
 
 #[wasm_bindgen]
-pub unsafe extern "C" fn run() {
-    render_frame_safe(&raw mut BUFFER);
+pub fn buffer_ptr() -> *mut u8 {
+    BUFFER.0.get() as *mut u8
 }
 
-fn render_frame_safe(buffer: *mut [u8; 4 * WIDTH * HEIGHT]) {
+#[wasm_bindgen]
+pub fn run() {
     let f = FRAME.fetch_add(SPEED, Ordering::Relaxed);
+    let buffer = unsafe { &mut *BUFFER.0.get() };
 
     for y in 0..HEIGHT {
         for x in 0..4 * WIDTH {
             let pixel: u32 = ((x * y) | 0xFF_00_FF_00) as u32;
-
-            unsafe {
-                let target = buffer.offset((4 * y * WIDTH + x) as isize);
-                *target = pixel.wrapping_add(f) as u8;
-            }
+            buffer[4 * y * WIDTH + x] = pixel.wrapping_add(f) as u8;
         }
     }
 }
