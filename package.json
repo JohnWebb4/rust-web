@@ -4,15 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "./bin/build.sh",
-    "dev": "./bin/dev.sh"
+    "build": "wasm-pack build --target web",
+    "serve": "node server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.4"
+    "express": "^5.2.1"
   }
 }
